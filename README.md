@@ -1,4 +1,4 @@
-# The Excess — Historical Danger Signal Archive
+h# The Excess — Historical Danger Signal Archive
 
 Free historical data from The Excess v10 pipeline: per-quarter identification
 of S&P 1500 firms whose sector-normalized net margin exceeds the danger
@@ -54,7 +54,7 @@ DW-2 (out-of-sample median RR = 4.35×), threshold stability (IQR = 0.11).
 ## Current-quarter data
 
 The CY2025+ danger signal is available via paid subscription.
-Details at [api.manifoldcontrol.com](https://api.manifoldcontrol.com).
+Details at [manifoldcontrol.com](https://manifoldcontrol.com).
 
 ## Citation
 
