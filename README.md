@@ -1,4 +1,4 @@
-# The Excess — Historical Danger Signal Archive
+# The Excess: Historical Danger Signal Archive
 
 Free historical output from The Excess v10 pipeline. Per-quarter CSVs
 identifying S&P 1500 firms whose sector-normalized net margin exceeds
