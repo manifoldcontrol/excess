@@ -53,3 +53,20 @@ S&P 1500 Profit Dynamics. Manifold Control. manifoldcontrol.com.
 ## License
 
 Data: CC BY 4.0. Methodology: see paper.
+
+
+## Methodology note
+
+v10 is the currently published construction; its output remains reproducible from the archive. Internal review has identified refinements to the scoring function and to the threshold interpretation. These are under development and will be released as a follow-up publication. The results on this page are unchanged by the review.
+
+## Open questions (under investigation)
+
+**Implied vs. realized volatility on flagged names.** The 4.3× excess rate must survive adjustment for options-implied vol before long-volatility strategies extract edge.
+
+**Directional asymmetry above s\*.** The downside vs. upside split of extreme events determines the value available to directional strategies beyond the variance forecast.
+
+**Threshold interpretation.** Shape-based evidence for a discontinuity at s\* ≈ 3.1σ has not been produced; operational calibration on a heavy-tailed margin distribution is the alternative framing under evaluation.
+
+**Scoring form.** The v10 scoring function is linear in features; comparison against more flexible scorers on the same feature set is in progress.
+
+Release timing: next publication. No scheduled date.
