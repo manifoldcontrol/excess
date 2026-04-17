@@ -31,7 +31,8 @@ Internal review showed RR(s) is monotonically increasing in s with
 no shape-based feature at 3.10; the threshold was operational, not
 structural. v12 replaces the single-threshold cut with a scored,
 sector-capped flag on a validated feature basis. See
-`papers/The_Excess_v12_Brief.pdf` for the full revision log.
+[manifoldcontrol.com](https://manifoldcontrol.com) for current
+methodology and the full revision log.
 
 ## Repository layout
 
@@ -39,12 +40,14 @@ sector-capped flag on a validated feature basis. See
 excess/
 ├── README.md                  this file
 ├── CHANGELOG.md               pipeline version history (v10 → v11 → v12)
-├── papers/
-│   ├── The_Excess_v10_Signal_Properties.pdf    v10 (historical)
-│   └── The_Excess_v12_Brief.pdf                v12 (current)
 ├── data/                      v10 archive (16 CSVs, CY2021Q1–CY2024Q4)
 └── data/v12/                  v12 archive (18 CSVs, CY2021Q3–CY2025Q4)
 ```
+
+This repository hosts signal output only. Methodology is on
+[manifoldcontrol.com](https://manifoldcontrol.com); the archival
+v10 paper is on Zenodo (DOI:
+[10.5281/zenodo.19472014](https://doi.org/10.5281/zenodo.19472014)).
 
 v10 CSVs remain at their original flat `data/` path for backward
 compatibility with consumers that hardcoded the old location.
@@ -72,8 +75,10 @@ and extreme_event columns.
 
 v10 CSVs in `data/` retain the original schema (ticker, quarter,
 sector, z_Q, s_star, above_threshold, Q_raw, delta_Q, extreme_event,
-extreme_threshold_90). v10 methodology is in
-`papers/The_Excess_v10_Signal_Properties.pdf`.
+extreme_threshold_90). v10 methodology is archived on Zenodo (DOI:
+[10.5281/zenodo.19472014](https://doi.org/10.5281/zenodo.19472014));
+its "structural threshold" framing has since been retracted, see
+the CHANGELOG for the revision history.
 
 ## Verification protocol
 
@@ -97,13 +102,21 @@ Institutional licensing: `james@nurho.tech`.
 
 ## Citation
 
+Data archive:
+
 ```
-Kovalenko, J. (2026). The Excess v12: Revised Construction,
-Out-of-Sample Validation, and Response to Methodological Review.
-Manifold Control. manifoldcontrol.com.
+Kovalenko, J. (2026). The Excess: S&P 1500 Danger Signal Archive
+[Data set]. Manifold Control.
+https://github.com/manifoldcontrol/excess
 ```
+
+For v10 methodology, cite the Zenodo record
+(DOI: 10.5281/zenodo.19472014). v12 methodology is documented at
+[manifoldcontrol.com](https://manifoldcontrol.com).
 
 ## License
 
-Data: CC BY 4.0. Methodology and papers: see licensing notes in
-each paper PDF.
+Data: CC BY 4.0. The v10 paper (Zenodo record 19472014) carries its
+own license on Zenodo. Methodology documentation on
+[manifoldcontrol.com](https://manifoldcontrol.com) is
+copyright Manifold Control.

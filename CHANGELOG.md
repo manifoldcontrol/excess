@@ -33,7 +33,7 @@ CY2021Q3–CY2025Q4. Minimum-disclosure schema: ticker, quarter,
 sector, v12_flag, raw_margin, delta_Q_abs, extreme_event. Score
 and coefficients subscriber-only.
 
-**Full brief.** `papers/The_Excess_v12_Brief.pdf`.
+**Full methodology.** [manifoldcontrol.com](https://manifoldcontrol.com).
 
 ## v11 — 2026-04-16 (interim, not released to archive)
 
@@ -61,10 +61,12 @@ macro-conditioned by IG credit spread ($\gamma = -3.44$).
 compatibility), 16 quarterly CSVs, CY2021Q1–CY2024Q4. Legacy
 schema with `z_Q`, `s_star`, `above_threshold`.
 
-**Paper.** `papers/The_Excess_v10_Signal_Properties.pdf`.
+**Paper.** Archived on Zenodo (DOI:
+[10.5281/zenodo.19472014](https://doi.org/10.5281/zenodo.19472014)).
 
-**Status.** Methodological concerns documented in the v12 brief.
-The v10 empirical numbers are correct on their own terms; the
-"structural threshold" framing was retracted after shape tests.
-The v10 archive remains public for reproducibility but should not
-be cited for current-state claims about the signal.
+**Status.** Methodological concerns documented at
+[manifoldcontrol.com](https://manifoldcontrol.com). The v10
+empirical numbers are correct on their own terms; the "structural
+threshold" framing was retracted after shape tests. The v10 data
+archive remains public here for reproducibility but should not be
+cited for current-state claims about the signal.
