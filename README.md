@@ -1,72 +1,109 @@
-# The Excess: Historical Danger Signal Archive
+# The Excess — S&P 1500 Danger Signal Archive
 
-Free historical output from The Excess v10 pipeline. Per-quarter CSVs
-identifying S&P 1500 firms whose sector-normalized net margin exceeds
-s* ≈ 3.1σ, macro-conditioned by IG credit spreads.
+Free historical output from The Excess pipeline. Per-quarter CSVs
+identifying S&P 1500 firms in the danger cohort: sector-relative
+margin extremity, sector-dispersion adjusted, with trailing margin
+volatility control.
 
-Firms above the threshold face 4.3× the base rate of extreme profit
-events (concurrent), 4.1× at one-quarter lag, 2.4× at two-quarter lag.
-The threshold moves: s*(m) = s₀ + γm, where γ = −3.44 and m is the IG
-credit spread. When spreads widen, s* drops and more firms enter the
-excess regime.
+Flagged firms face elevated risk of extreme profit events. The
+signal forecasts *variance*, not direction; this is not investment
+advice.
 
-The signal predicts elevated profit *volatility*, not direction. Some
-firms above s* will experience upside extremes. This is a variance
-forecast, not a short signal, and not investment advice.
+## Current version: v12 (April 2026)
 
-## Data
+Construction: three-feature basis (raw distance from sector median,
+inverse sector MAD, trailing four-quarter mean |ΔQ|) scored by a
+gradient-boosted tree. Selection: top 42 firms per quarter by score,
+maximum 6 per GICS sector.
 
-Per-quarter CSVs in `data/`. Coverage: CY2021Q1 through CY2024Q4 (16 quarters).
+**Empirical claims (verifiable from data below):**
+
+| Metric | v12 | v10 predecessor |
+|---|---|---|
+| RR at k=0 (concurrent) | 11.66× | 4.3× |
+| RR at k=1 (one quarter forward) | 10.99× | 4.1× |
+| RR at k=2 (two quarters forward) | 5.89× | 2.4× |
+| Sector HHI | 1,160 | 1,432 |
+| OOS AUC (+1Q) | 0.872 | 0.773 |
+
+The v10 paper claimed a *structural* danger threshold at s* ≈ 3.1σ.
+Internal review showed RR(s) is monotonically increasing in s with
+no shape-based feature at 3.10; the threshold was operational, not
+structural. v12 replaces the single-threshold cut with a scored,
+sector-capped flag on a validated feature basis. See
+`papers/The_Excess_v12_Brief.pdf` for the full revision log.
+
+## Repository layout
+
+```
+excess/
+├── README.md                  this file
+├── CHANGELOG.md               pipeline version history (v10 → v11 → v12)
+├── papers/
+│   ├── The_Excess_v10_Signal_Properties.pdf    v10 (historical)
+│   └── The_Excess_v12_Brief.pdf                v12 (current)
+├── data/                      v10 archive (16 CSVs, CY2021Q1–CY2024Q4)
+└── data/v12/                  v12 archive (18 CSVs, CY2021Q3–CY2025Q4)
+```
+
+v10 CSVs remain at their original flat `data/` path for backward
+compatibility with consumers that hardcoded the old location.
+v12 CSVs live at `data/v12/`.
+
+## v12 CSV schema
+
+Minimum-disclosure schema (no score, no features, no coefficients):
 
 | Column | Type | Description |
-|--------|------|-------------|
+|---|---|---|
 | `ticker` | string | Stock symbol |
-| `quarter` | string | CY2024Q1 format |
+| `quarter` | string | `CY2024Q1` format |
 | `sector` | string | GICS sector |
-| `z_Q` | float | Sector-normalized net margin (MAD z-score) |
-| `s_star` | float | Danger threshold for this quarter |
-| `above_threshold` | 0/1 | Danger flag: z_Q > s* |
-| `Q_raw` | float | Raw net profit margin |
-| `delta_Q` | float | |Q[t] - Q[t-1]| |
-| `extreme_event` | 0/1 | delta_Q > 90th percentile |
+| `v12_flag` | 0/1 | Top-42 with max 6/sector at v12 score |
+| `raw_margin` | float | Net profit margin (NI / revenue) |
+| `delta_Q_abs` | float | \|Q[t] − Q[t−1]\| |
+| `extreme_event` | 0/1 | `delta_Q_abs` > 90th percentile in this quarter |
 
-## Methodology
+Fitted coefficients and the v12 score itself are subscriber-only.
+RR, persistence, and sector HHI are all verifiable from the flag
+and extreme_event columns.
 
-Full methodology: The Excess v10 Results (Kovalenko, April 2026).
-Pipeline code and formal derivation at [manifoldcontrol.com](https://manifoldcontrol.com).
+## v10 CSV schema (legacy)
 
-v10 product tests: 4/4 passed. DW-1 (4.3× RR), IG_spread (γ = −3.44,
-ΔBIC = −952), DW-2 (OOS median RR = 4.35×), threshold stability
-(IQR = 0.11 across 19 quarters).
+v10 CSVs in `data/` retain the original schema (ticker, quarter,
+sector, z_Q, s_star, above_threshold, Q_raw, delta_Q, extreme_event,
+extreme_threshold_90). v10 methodology is in
+`papers/The_Excess_v10_Signal_Properties.pdf`.
+
+## Verification protocol
+
+1. Pick a v12 CSV (e.g., `data/v12/danger_signal_v12_CY2024Q3.csv`).
+2. Partition firms into `v12_flag == 1` (flagged) and `v12_flag == 0`
+   (not flagged).
+3. In each group, compute the fraction with `extreme_event == 1`.
+4. Ratio of fractions is the empirical RR at k=0 for that quarter.
+5. To verify forward persistence (k=1, k=2), track each flagged
+   firm's `extreme_event` in the next 1–2 quarters using the next
+   CSV(s) and take the same ratio.
+
+No proprietary software or pipeline access is required. Everything
+is reproducible from the public columns in a spreadsheet.
 
 ## Current-quarter data
 
-CY2025+ signal available via subscription at [manifoldcontrol.com](https://manifoldcontrol.com).
+Live v12 signal (current quarter) and fitted scorer:
+[api.manifoldcontrol.com](https://api.manifoldcontrol.com).
+Institutional licensing: `james@nurho.tech`.
 
 ## Citation
 
 ```
-Kovalenko, J. (2026). The Excess v10: EVT Danger Threshold in
-S&P 1500 Profit Dynamics. Manifold Control. manifoldcontrol.com.
+Kovalenko, J. (2026). The Excess v12: Revised Construction,
+Out-of-Sample Validation, and Response to Methodological Review.
+Manifold Control. manifoldcontrol.com.
 ```
 
 ## License
 
-Data: CC BY 4.0. Methodology: see paper.
-
-
-## Methodology note
-
-v10 is the currently published construction; its output remains reproducible from the archive. Internal review has identified refinements to the scoring function and to the threshold interpretation. These are under development and will be released as a follow-up publication. The results on this page are unchanged by the review.
-
-## Open questions (under investigation)
-
-**Implied vs. realized volatility on flagged names.** The 4.3× excess rate must survive adjustment for options-implied vol before long-volatility strategies extract edge.
-
-**Directional asymmetry above s\*.** The downside vs. upside split of extreme events determines the value available to directional strategies beyond the variance forecast.
-
-**Threshold interpretation.** Shape-based evidence for a discontinuity at s\* ≈ 3.1σ has not been produced; operational calibration on a heavy-tailed margin distribution is the alternative framing under evaluation.
-
-**Scoring form.** The v10 scoring function is linear in features; comparison against more flexible scorers on the same feature set is in progress.
-
-Release timing: next publication. No scheduled date.
+Data: CC BY 4.0. Methodology and papers: see licensing notes in
+each paper PDF.
